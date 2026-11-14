@@ -1836,6 +1836,36 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
 
+    /* TURNIERPLAN */
+    .sched-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .sched-kpi { background: #FFFFFF; border: 1px solid var(--asv-card-border); border-radius: 10px; padding: 12px 14px; }
+    .sched-kpi .k-label { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--asv-text-muted); letter-spacing: .4px; }
+    .sched-kpi .k-value { font-size: 22px; font-weight: 900; color: var(--asv-schwarz); margin-top: 2px; }
+    .sched-kpi .k-sub { font-size: 12px; color: var(--asv-text-muted); font-weight: 600; margin-top: 2px; }
+    .sched-kpi.ok .k-value { color: var(--asv-accent-green); }
+    .sched-kpi.late .k-value { color: var(--asv-accent-red); }
+    .sched-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .sched-controls input { padding: 5px 8px; border: 1px solid var(--asv-card-border); border-radius: 6px; font-weight: 700; margin-left: 6px; }
+    .sched-legend { display: flex; gap: 12px; align-items: center; font-size: 12px; color: var(--asv-text-muted); font-weight: 600; }
+    .sched-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; background: #9CA3AF; }
+    .sched-dot.done { background: var(--asv-accent-green); }
+    .sched-dot.current { background: var(--asv-schwarz); }
+    .sched-dot.next { background: #F59E0B; }
+    .sched-table-wrap { background: #FFFFFF; border: 1px solid var(--asv-card-border); border-radius: 10px; overflow: hidden; }
+    .sched-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .sched-table th { background: var(--asv-schwarz); color: #FFFFFF; text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+    .sched-table td { padding: 7px 10px; border-top: 1px solid #E5E7EB; vertical-align: top; }
+    .sched-table tr.phase-row td { background: #F3F4F6; font-weight: 900; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
+    .sched-table tr.break-row td { background: #FFFBEB; color: #92400E; font-weight: 700; text-align: center; font-size: 12px; }
+    .sched-table tr.round-row { cursor: pointer; }
+    .sched-table tr.round-row:hover td { background: #F9FAFB; }
+    .sched-table tr.round-row.done td { color: #6B7280; }
+    .sched-table tr.round-row.current td { background: #111111; color: #FFFFFF; font-weight: 700; }
+    .sched-table tr.round-row.next td { background: #FEF3C7; }
+    .sched-table .m-group { font-weight: 800; font-size: 10px; text-transform: uppercase; opacity: .7; display: block; }
+    .sched-table .m-score { font-weight: 900; margin-left: 4px; }
+    .sched-table .r-num { font-weight: 900; white-space: nowrap; }
+
     .nav-tab-btn {
       background: none;
       border: none;
@@ -2824,6 +2854,9 @@
     <button class="nav-tab-btn active" onclick="switchTab('tab-matches')">
       <span>🏒</span> Spielplan & Bahnbelegung
     </button>
+    <button class="nav-tab-btn" onclick="switchTab('tab-schedule')">
+      <span>📅</span> Turnierplan
+    </button>
     <button class="nav-tab-btn" onclick="switchTab('tab-standings')">
       <span>📊</span> Tabellen & Zwischenstände
     </button>
@@ -2877,6 +2910,33 @@
     </div>
 
     <!-- TAB 2: Tabellen & Zwischenstände -->
+    <!-- TAB: Turnierplan (Zeitplan & Überblick) -->
+    <div id="tab-schedule" class="tab-content">
+      <div class="sched-summary" id="schedSummary"></div>
+      <div class="sched-controls">
+        <label>Turnierbeginn:
+          <input type="time" id="schedStartTime" value="10:30" onchange="setScheduleStart(this.value)">
+        </label>
+        <span class="sched-legend">
+          <span class="sched-dot done"></span> beendet
+          <span class="sched-dot current"></span> aktuelle Runde
+          <span class="sched-dot next"></span> nächste Runde
+        </span>
+      </div>
+      <div class="sched-table-wrap">
+        <table class="sched-table">
+          <thead>
+            <tr>
+              <th>Runde</th><th>Uhrzeit (Soll)</th>
+              <th>Bahn 1</th><th>Bahn 2</th><th>Bahn 3</th><th>Bahn 4</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="schedBody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div id="tab-standings" class="tab-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <h2 style="font-size: 20px; font-weight: 800; color: var(--asv-text-main);">Aktuelle Tabellen & Wertung (IFI-Regelwerk)</h2>
@@ -4365,10 +4425,149 @@
       const btn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
       if (btn) btn.classList.add('active');
 
+      if (tabId === 'tab-schedule') renderSchedule();
       if (tabId === 'tab-standings') renderStandingsTables();
       if (tabId === 'tab-final-ranking') renderFinalRankings();
       if (tabId === 'tab-print') generateAllCertificates();
     }
+
+    // -------------------------------------------------------------
+    // TURNIERPLAN (Zeitplan & Überblick)
+    // -------------------------------------------------------------
+    const SCHED_BREAKS = { 7: 20, 14: 10 }; // Pause (Min.) NACH Runde 7 (Mittag) und Runde 14 (Auswertung)
+
+    function schedStartMinutes() {
+      const t = (state.startTime || '10:30').split(':');
+      return parseInt(t[0], 10) * 60 + parseInt(t[1] || '0', 10);
+    }
+
+    function fmtClock(totalMin) {
+      const m = ((Math.round(totalMin) % 1440) + 1440) % 1440;
+      return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    }
+
+    // Geplanter Start (in Minuten seit 0:00) jeder Runde
+    function computeSchedule() {
+      const dur = state.roundDuration || 25;
+      let t = schedStartMinutes();
+      const out = {};
+      state.rounds.slice().sort((a, b) => a.round - b.round).forEach(r => {
+        out[r.round] = { start: t, end: t + dur };
+        t += dur + (SCHED_BREAKS[r.round] || 0);
+      });
+      return out;
+    }
+
+    function roundIsComplete(r) {
+      return Array.isArray(r.matches) && r.matches.length > 0 &&
+        r.matches.every(m => m.s1 !== null && m.s2 !== null && m.s1 !== '' && m.s2 !== '');
+    }
+
+    function setScheduleStart(val) {
+      if (!/^\d{1,2}:\d{2}$/.test(val)) return;
+      state.startTime = val;
+      saveState();
+      renderSchedule();
+    }
+
+    function renderSchedule() {
+      const body = document.getElementById('schedBody');
+      const sum = document.getElementById('schedSummary');
+      if (!body || !sum || !Array.isArray(state.rounds)) return;
+
+      const input = document.getElementById('schedStartTime');
+      if (input && document.activeElement !== input) input.value = state.startTime || '10:30';
+
+      const dur = state.roundDuration || 25;
+      const sched = computeSchedule();
+      const rounds = state.rounds.slice().sort((a, b) => a.round - b.round);
+      const cur = state.currentRound;
+      const lastRound = rounds.length ? rounds[rounds.length - 1].round : 0;
+      const nextRoundNo = cur < lastRound ? cur + 1 : null;
+
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+
+      // Verzug: Wo müssten wir laut Plan sein vs. wo sind wir wirklich?
+      const curSlot = sched[cur];
+      const elapsed = dur - (state.timerSeconds || 0) / 60; // bereits gespielte Minuten der aktuellen Runde
+      let delay = null;
+      if (curSlot) delay = nowMin - curSlot.start - Math.max(0, elapsed);
+
+      // Voraussichtliches Ende (Ist-Fortschritt hochgerechnet)
+      let forecastEnd = null;
+      if (curSlot) {
+        const remainingCur = Math.max(0, dur - Math.max(0, elapsed));
+        const lastSlot = sched[lastRound];
+        const plannedEndOfCur = curSlot.end;
+        const plannedEndOfAll = lastSlot ? lastSlot.end : plannedEndOfCur;
+        // Beginn der aktuellen Runde in Ist-Zeit = jetzt - bereits gespielte Zeit
+        const actualStartCur = Math.max(nowMin - Math.max(0, elapsed), curSlot.start);
+        forecastEnd = plannedEndOfAll + (actualStartCur - curSlot.start);
+      }
+
+      const doneCount = rounds.filter(roundIsComplete).length;
+      const nextR = nextRoundNo ? rounds.find(r => r.round === nextRoundNo) : null;
+
+      let delayText = '–', delaySub = '', delayCls = '';
+      if (delay !== null) {
+        const d = Math.round(delay);
+        if (Math.abs(d) <= 2) { delayText = 'Im Zeitplan'; delayCls = 'ok'; delaySub = 'Abweichung ≤ 2 Min.'; }
+        else if (d > 0) { delayText = '+' + d + ' Min.'; delayCls = 'late'; delaySub = 'hinter dem Plan'; }
+        else { delayText = d + ' Min.'; delayCls = 'ok'; delaySub = 'vor dem Plan (Start noch nicht erreicht)'; }
+      }
+
+      sum.innerHTML = `
+        <div class="sched-kpi"><div class="k-label">Aktuelle Runde</div>
+          <div class="k-value">${cur} / ${lastRound}</div>
+          <div class="k-sub">${curSlot ? 'Soll: ' + fmtClock(curSlot.start) + ' – ' + fmtClock(curSlot.end) + ' Uhr' : ''}</div></div>
+        <div class="sched-kpi ${delayCls}"><div class="k-label">Zeitplan</div>
+          <div class="k-value">${delayText}</div><div class="k-sub">${delaySub}</div></div>
+        <div class="sched-kpi"><div class="k-label">Nächste Runde</div>
+          <div class="k-value">${nextR ? 'Runde ' + nextR.round + ' · ' + fmtClock(sched[nextR.round].start) : '–'}</div>
+          <div class="k-sub">${nextR ? (nextR.label || '') : 'Letzte Runde läuft'}</div></div>
+        <div class="sched-kpi"><div class="k-label">Voraussichtliches Ende</div>
+          <div class="k-value">${forecastEnd !== null ? fmtClock(forecastEnd) + ' Uhr' : '–'}</div>
+          <div class="k-sub">${doneCount} von ${rounds.length} Runden beendet · geplant ${sched[lastRound] ? fmtClock(sched[lastRound].end) : ''}</div></div>
+      `;
+
+      const phaseNames = { vorrunde: 'Phase 1 · Vorrunde', zwischenrunde: 'Phase 2 · Zwischenrunde', endspiele: 'Phase 3 · Endspiele' };
+      let html = '';
+      let lastPhase = null;
+      rounds.forEach(r => {
+        if (r.phase !== lastPhase) {
+          html += `<tr class="phase-row"><td colspan="7">${phaseNames[r.phase] || r.phase}</td></tr>`;
+          lastPhase = r.phase;
+        }
+        const done = roundIsComplete(r);
+        const cls = r.round === cur ? 'current' : (r.round === nextRoundNo ? 'next' : (done ? 'done' : ''));
+        const slot = sched[r.round];
+        const cells = [1, 2, 3, 4].map(rink => {
+          const m = (r.matches || []).find(x => x.rink === rink);
+          if (!m) return '<td>–</td>';
+          const t1 = getTeam(m.t1), t2 = getTeam(m.t2);
+          const sc = (m.s1 !== null && m.s2 !== null && m.s1 !== '' && m.s2 !== '') ? `<span class="m-score">${m.s1}:${m.s2}</span>` : '';
+          return `<td><span class="m-group">${m.name || 'Gr. ' + m.group}</span>${t1.name} – ${t2.name}${sc}</td>`;
+        }).join('');
+        const status = r.round === cur ? '▶ Aktuell' : (r.round === nextRoundNo ? '⏭ Nächste' : (done ? '✓ Beendet' : '⏳ Offen'));
+        html += `<tr class="round-row ${cls}" onclick="selectRound(${r.round}); switchTab('tab-matches');" title="Zur Runde ${r.round} wechseln">
+          <td class="r-num">Runde ${r.round}</td>
+          <td class="r-num">${fmtClock(slot.start)} – ${fmtClock(slot.end)}</td>
+          ${cells}
+          <td>${status}</td></tr>`;
+        if (SCHED_BREAKS[r.round]) {
+          const label = r.round === 7 ? 'Mittagspause & Gruppenauswertung' : 'Auswertungspause';
+          html += `<tr class="break-row"><td colspan="7">☕ ${label}: ${fmtClock(slot.end)} – ${fmtClock(slot.end + SCHED_BREAKS[r.round])} Uhr (${SCHED_BREAKS[r.round]} Min.)</td></tr>`;
+        }
+      });
+      body.innerHTML = html;
+    }
+
+    // Uhr & Verzug laufend aktualisieren, solange der Tab sichtbar ist
+    setInterval(() => {
+      const tab = document.getElementById('tab-schedule');
+      if (tab && tab.classList.contains('active')) renderSchedule();
+    }, 5000);
 
     function renderAllViews(full = false) {
       renderRoundsPills();
@@ -4377,6 +4576,7 @@
       renderFinalRankings();
       renderTeamsList();
       renderTVView();
+      renderSchedule();
       updateTimerUI();
     }
 
