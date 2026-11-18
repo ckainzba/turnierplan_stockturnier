@@ -421,7 +421,7 @@
 
     .asv-table th {
       background: #F3F4F6;
-      padding: 6px 10px;
+      padding: 6px 7px;
       color: #4B5563;
       font-size: 10px;
       text-transform: uppercase;
@@ -431,7 +431,7 @@
     }
 
     .asv-table td {
-      padding: 7px 10px;
+      padding: 7px 7px;
       border-bottom: 1px solid #F3F4F6;
       color: #111827;
     }
@@ -452,7 +452,7 @@
 
     .td-team {
       font-weight: 700;
-      max-width: 140px;
+      max-width: 115px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -837,211 +837,173 @@
     // DATA MODEL & SCHEDULE LOGIC (DEFAULT FALLBACK)
     // -------------------------------------------------------------
     const DEFAULT_TEAMS = [
-      { id: 'A1', group: 'A', name: 'Feuerwehr 1' },
-      { id: 'A2', group: 'A', name: 'Schützenverein' },
-      { id: 'A3', group: 'A', name: 'Stammtisch Gemütlichkeit' },
-      { id: 'A4', group: 'A', name: 'Veteranen & Reservisten' },
+      { id: 'A1', group: 'A', name: 'A1' },
+      { id: 'A2', group: 'A', name: 'A2' },
+      { id: 'A3', group: 'A', name: 'A3' },
+      { id: 'A4', group: 'A', name: 'A4' },
 
-      { id: 'B1', group: 'B', name: 'Dorfjugend' },
-      { id: 'B2', group: 'B', name: 'Sportfreunde' },
-      { id: 'B3', group: 'B', name: 'Bauhof & Gemeinde' },
-      { id: 'B4', group: 'B', name: 'Kameradschaftsbund' },
+      { id: 'B1', group: 'B', name: 'B1' },
+      { id: 'B2', group: 'B', name: 'B2' },
+      { id: 'B3', group: 'B', name: 'B3' },
+      { id: 'B4', group: 'B', name: 'B4' },
 
-      { id: 'C1', group: 'C', name: 'Faschingsclub' },
-      { id: 'C2', group: 'C', name: 'Tennisverein' },
-      { id: 'C3', group: 'C', name: 'Musikverein' },
-      { id: 'C4', group: 'C', name: 'Altherren Kicker' },
+      { id: 'C1', group: 'C', name: 'C1' },
+      { id: 'C2', group: 'C', name: 'C2' },
+      { id: 'C3', group: 'C', name: 'C3' },
+      { id: 'C4', group: 'C', name: 'C4' },
 
-      { id: 'D1', group: 'D', name: 'Feuerwehr 2' },
-      { id: 'D2', group: 'D', name: 'Eisstock-Freunde' },
-      { id: 'D3', group: 'D', name: 'Landjugend' },
-      { id: 'D4', group: 'D', name: 'Trachtenverein' },
-      { id: 'D5', group: 'D', name: 'Seniorenclub' }
+      { id: 'D1', group: 'D', name: 'D1' },
+      { id: 'D2', group: 'D', name: 'D2' },
+      { id: 'D3', group: 'D', name: 'D3' },
+      { id: 'D4', group: 'D', name: 'D4' }
     ];
 
-    // Master 17-Team Vorrunde Schedule: 7 Rounds x 4 Rinks = 28 Matches
-    // Mathematically balanced: Groups A, B, C play 6 matches each (3 per team); Group D plays 10 matches (4 per team).
+    // 16-Team Vorrunde Schedule: 6 Rounds x 4 Rinks = 24 Matches
+    // Feste Bahn pro Gruppe: Gr. A = Bahn 1, Gr. B = Bahn 2, Gr. C = Bahn 3, Gr. D = Bahn 4
     const VORRUNDE_SCHEDULE = [
-      // Runde 1
       {
         round: 1,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 1',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A2', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A3', t2: 'A4', s1: null, s2: null },
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B2', s1: null, s2: null },
           { rink: 3, group: 'C', t1: 'C1', t2: 'C2', s1: null, s2: null },
-          { rink: 4, group: 'C', t1: 'C3', t2: 'C4', s1: null, s2: null }
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D2', s1: null, s2: null }
         ]
       },
-      // Runde 2
       {
         round: 2,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 2',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B2', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A3', t2: 'A4', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B3', t2: 'B4', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D2', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C3', t2: 'C4', s1: null, s2: null },
           { rink: 4, group: 'D', t1: 'D3', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 3
       {
         round: 3,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 3',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A3', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A2', t2: 'A4', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D3', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D2', t2: 'D5', s1: null, s2: null }
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B3', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C1', t2: 'C3', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D3', s1: null, s2: null }
         ]
       },
-      // Runde 4
       {
         round: 4,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 4',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B3', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A2', t2: 'A4', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B2', t2: 'B4', s1: null, s2: null },
-          { rink: 3, group: 'C', t1: 'C1', t2: 'C3', s1: null, s2: null },
-          { rink: 4, group: 'C', t1: 'C2', t2: 'C4', s1: null, s2: null }
+          { rink: 3, group: 'C', t1: 'C2', t2: 'C4', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D2', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 5
       {
         round: 5,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 5',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A4', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A2', t2: 'A3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D4', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D3', t2: 'D5', s1: null, s2: null }
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B4', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C1', t2: 'C4', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 6
       {
         round: 6,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 6',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B4', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A2', t2: 'A3', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B2', t2: 'B3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D5', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D2', t2: 'D4', s1: null, s2: null }
-        ]
-      },
-      // Runde 7
-      {
-        round: 7,
-        phase: 'vorrunde',
-        label: 'Vorrunde – Runde 7',
-        matches: [
-          { rink: 1, group: 'C', t1: 'C1', t2: 'C4', s1: null, s2: null },
-          { rink: 2, group: 'C', t1: 'C2', t2: 'C3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D2', t2: 'D3', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D4', t2: 'D5', s1: null, s2: null }
+          { rink: 3, group: 'C', t1: 'C2', t2: 'C3', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D2', t2: 'D3', s1: null, s2: null }
         ]
       }
     ];
 
-    // Master Zwischenrunde Schedule (Runden 8 - 14)
-    // 4 Gruppen: E, F (Meisterrunde Plätze 1-8 à 4 Teams); G (Platzierungsrunde Plätze 9-16 à 4 Teams); H (Platzierungsrunde Plätze 9-17 mit 5 Teams inkl. 17. Mannschaft!).
-    // 7 Runden à 4 Bahnen = 28 Spiele (Gr. E 6 Spiele, Gr. F 6 Spiele, Gr. G 6 Spiele, Gr. H 10 Spiele).
+    // Zwischenrunde Schedule (Runden 7 - 12): 4 x 4er-Gruppen, feste Bahn pro Gruppe
+    // Gr. E = Bahn 1, Gr. F = Bahn 2 (Meisterrunde 1-8); Gr. G = Bahn 3, Gr. H = Bahn 4 (Platzierungsrunde 9-16)
     const ZWISCHENRUNDE_SCHEDULE = [
-      // Runde 8 (Durchgang 1)
       {
-        round: 8,
+        round: 7,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 1',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E2', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E3', t2: 'E4', s1: null, s2: null },
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F2', s1: null, s2: null },
           { rink: 3, group: 'G', t1: 'G1', t2: 'G2', s1: null, s2: null },
-          { rink: 4, group: 'G', t1: 'G3', t2: 'G4', s1: null, s2: null }
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H2', s1: null, s2: null }
         ]
       },
-      // Runde 9 (Durchgang 2)
       {
-        round: 9,
+        round: 8,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 2',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F2', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E3', t2: 'E4', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F3', t2: 'F4', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H2', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G3', t2: 'G4', s1: null, s2: null },
           { rink: 4, group: 'H', t1: 'H3', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 10 (Durchgang 3)
       {
-        round: 10,
+        round: 9,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 3',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E3', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E2', t2: 'E4', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H3', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H2', t2: 'H5', s1: null, s2: null }
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F3', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G1', t2: 'G3', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H3', s1: null, s2: null }
         ]
       },
-      // Runde 11 (Durchgang 4)
       {
-        round: 11,
+        round: 10,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 4',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F3', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E2', t2: 'E4', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F2', t2: 'F4', s1: null, s2: null },
-          { rink: 3, group: 'G', t1: 'G1', t2: 'G3', s1: null, s2: null },
-          { rink: 4, group: 'G', t1: 'G2', t2: 'G4', s1: null, s2: null }
+          { rink: 3, group: 'G', t1: 'G2', t2: 'G4', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H2', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 12 (Durchgang 5)
       {
-        round: 12,
+        round: 11,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 5',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E4', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E2', t2: 'E3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H4', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H3', t2: 'H5', s1: null, s2: null }
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F4', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G1', t2: 'G4', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 13 (Durchgang 6)
       {
-        round: 13,
+        round: 12,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 6',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F4', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E2', t2: 'E3', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F2', t2: 'F3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H5', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H2', t2: 'H4', s1: null, s2: null }
-        ]
-      },
-      // Runde 14 (Durchgang 7)
-      {
-        round: 14,
-        phase: 'zwischenrunde',
-        label: 'Zwischenrunde – Durchgang 7',
-        matches: [
-          { rink: 1, group: 'G', t1: 'G1', t2: 'G4', s1: null, s2: null },
-          { rink: 2, group: 'G', t1: 'G2', t2: 'G3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H2', t2: 'H3', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H4', t2: 'H5', s1: null, s2: null }
+          { rink: 3, group: 'G', t1: 'G2', t2: 'G3', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H2', t2: 'H3', s1: null, s2: null }
         ]
       }
     ];
 
-    // Master Endspiele (Runden 15 & 16)
+    // Master Endspiele (Runden 13 & 14)
     const ENDSPIELE_SCHEDULE = [
       {
-        round: 15,
+        round: 13,
         phase: 'endspiele',
         label: 'Endspiele – Runde 1 (Plätze 3, 5, 9, 11)',
         matches: [
@@ -1052,7 +1014,7 @@
         ]
       },
       {
-        round: 16,
+        round: 14,
         phase: 'endspiele',
         label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 7, 13, 15)',
         matches: [
@@ -1146,7 +1108,7 @@
 
     // 2. Storage event fallback
     window.addEventListener('storage', (e) => {
-      if ((e.key === 'asv_eisstock_data_v3' || e.key === 'asv_eisstock_data_v2') && e.newValue) {
+      if ((e.key === 'asv_eisstock_data_v4' || e.key === 'asv_eisstock_data_v3' || e.key === 'asv_eisstock_data_v2') && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
           const validated = validateAndSanitizeState(parsed);
@@ -1165,8 +1127,8 @@
     // -------------------------------------------------------------
     function validateAndSanitizeState(parsed) {
       if (!parsed || typeof parsed !== 'object') return null;
-      if (!Array.isArray(parsed.teams) || parsed.teams.length < 17) return null;
-      if (!Array.isArray(parsed.rounds) || parsed.rounds.length < 16) return null;
+      if (!Array.isArray(parsed.teams) || parsed.teams.length !== 16) return null;
+      if (!Array.isArray(parsed.rounds) || parsed.rounds.length !== 14) return null;
       for (const r of parsed.rounds) {
         if (!Array.isArray(r.matches)) return null;
       }
@@ -1174,12 +1136,15 @@
     }
 
     function loadPersistedState() {
-      // Clean up legacy v2
-      try { localStorage.removeItem('asv_eisstock_data_v2'); } catch(e) {}
-
-      // Load from localStorage v3
+      // Clean up legacy v2 & v3 (17-Team-Modus)
       try {
-        const saved = localStorage.getItem('asv_eisstock_data_v3');
+        localStorage.removeItem('asv_eisstock_data_v2');
+        localStorage.removeItem('asv_eisstock_data_v3');
+      } catch(e) {}
+
+      // Load from localStorage v4
+      try {
+        const saved = localStorage.getItem('asv_eisstock_data_v4');
         if (saved) {
           const parsed = JSON.parse(saved);
           const validated = validateAndSanitizeState(parsed);
@@ -1197,7 +1162,7 @@
 
       // If storage is empty or invalid, save clean default state
       try {
-        localStorage.setItem('asv_eisstock_data_v3', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
       } catch(e) {}
     }
 
@@ -1254,7 +1219,7 @@
         groupTeams = state.teams.filter(t => t.group === groupKey);
       } else if (filterPhase === 'zwischenrunde') {
         const prefix = groupKey;
-        const indices = groupKey === 'H' ? [1, 2, 3, 4, 5] : [1, 2, 3, 4];
+        const indices = [1, 2, 3, 4];
         groupTeams = indices.map(idx => {
           const slot = prefix + idx;
           const assigned = (state.qualifiers && state.qualifiers[slot]) || null;
@@ -1338,9 +1303,10 @@
         return s;
       });
 
-      // Sortierung nach Punkten -> Stockdifferenz -> Eigene Stöcke
+      // Sortierung nach IFI-Regelwerk: Punkte -> Stocknote -> Stockdifferenz -> Eigene Stöcke
       list.sort((a, b) => {
         if (b.pointsPlus !== a.pointsPlus) return b.pointsPlus - a.pointsPlus;
+        if (Math.abs(b.stockNote - a.stockNote) > 0.0001) return b.stockNote - a.stockNote;
         if (b.stockDiff !== a.stockDiff) return b.stockDiff - a.stockDiff;
         return b.stocksPlus - a.stocksPlus;
       });
@@ -1449,10 +1415,6 @@
           finalRankList.push({ rank: p.rank2, team: { id: '?', name: `Verlierer ${p.name}` }, status: 'Ausstehend' });
         }
       });
-
-      const tableH = calculateGroupTable('H', 'zwischenrunde');
-      const t17 = (tableH[4] && tableH[4].team) || (state.qualifiers && state.qualifiers['H5']) || state.teams[16] || { id: 'H5', name: '5. Platz Gruppe H' };
-      finalRankList.push({ rank: 17, team: t17, status: 'Platz 17 (Zwischenrunde Gruppe H)' });
 
       finalRankList.sort((a, b) => a.rank - b.rank);
       return finalRankList;
@@ -1587,7 +1549,8 @@
               <td class="td-rank">${i + 1}.</td>
               <td class="td-team" title="${row.team.name}">${row.team.name}</td>
               <td class="td-pts">${row.pointsPlus}:${row.pointsMinus}</td>
-              <td class="td-note" style="text-align:right; font-weight:800; color:${row.stockDiff > 0 ? 'var(--asv-accent-green)' : (row.stockDiff < 0 ? 'var(--asv-accent-red)' : 'inherit')};">${row.stockDiff > 0 ? '+' : ''}${row.stockDiff}</td>
+              <td style="text-align:right; font-weight:800; color:${row.stockDiff > 0 ? 'var(--asv-accent-green)' : (row.stockDiff < 0 ? 'var(--asv-accent-red)' : 'inherit')};">${row.stockDiff > 0 ? '+' : ''}${row.stockDiff}</td>
+              <td class="td-note">${row.played === 0 ? '0.000' : row.stockNote.toFixed(3)}</td>
             </tr>
           `).join('');
 
@@ -1612,7 +1575,7 @@
           card.innerHTML = `
             <div class="table-card-header">
               <span>Gruppe ${gKey}</span>
-              <small>Pkt / Diff</small>
+              <small>Pkt / Diff / Note</small>
             </div>
             <div class="table-card-body">
               <table class="asv-table">
@@ -1622,6 +1585,7 @@
                     <th>Team</th>
                     <th style="text-align:center;">Pkt</th>
                     <th style="text-align:right;">Diff</th>
+                    <th style="text-align:right;">Note</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1655,10 +1619,11 @@
       try {
         localStorage.removeItem('asv_eisstock_data_v2');
         localStorage.removeItem('asv_eisstock_data_v3');
+        localStorage.removeItem('asv_eisstock_data_v4');
       } catch(e) {}
       state = createInitialState();
       try {
-        localStorage.setItem('asv_eisstock_data_v3', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
       } catch(e) {}
       renderTV();
       alert('Anzeige & Cache erfolgreich zurückgesetzt!');
@@ -2235,11 +2200,11 @@
       border-top: 1px solid #E5E7EB;
     }
 
-    /* Tables Section */
+    /* Tables Section (2x2 Grid auf Desktop für volle Spaltenbreite) */
     .tables-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 26px;
       margin-top: 16px;
     }
 
@@ -2902,7 +2867,7 @@
 
     /* Responsive */
     @media (max-width: 900px) {
-      .rinks-grid {
+      .rinks-grid, .tables-grid {
         grid-template-columns: 1fr;
       }
       .tv-rinks-container, .tv-tables-container {
@@ -2923,7 +2888,7 @@
       <img src="asv-wappen.jpg" class="brand-crest" alt="A.S.V. Undorf 1950">
       <div class="brand-text">
         <h1 id="tournamentTitle">Dorfmeisterschaften im Stockschießen</h1>
-        <p>17 Mannschaften • 4 Bahnen • Offizieller Turnierplan</p>
+        <p>16 Mannschaften • 4 Bahnen • Offizieller Turnierplan</p>
       </div>
     </div>
 
@@ -2966,9 +2931,9 @@
           <div style="display: flex; align-items: center; gap: 12px;">
             <span class="phase-badge" id="currentPhaseLabel">Phase 1: Vorrunde</span>
             <select id="phaseSelect" onchange="changePhase(this.value)" style="background: #FFFFFF; color: var(--asv-text-main); border: 1px solid var(--asv-card-border); padding: 6px 12px; border-radius: 6px; font-weight: 700;">
-              <option value="vorrunde">1. Vorrunde (Runde 1 - 7)</option>
-              <option value="zwischenrunde">2. Zwischenrunde (Runde 8 - 14)</option>
-              <option value="endspiele">3. Endspiele & Finale (Runde 15 - 16)</option>
+              <option value="vorrunde">1. Vorrunde (Runde 1 - 6)</option>
+              <option value="zwischenrunde">2. Zwischenrunde (Runde 7 - 12)</option>
+              <option value="endspiele">3. Endspiele & Finale (Runde 13 - 14)</option>
             </select>
           </div>
 
@@ -3027,9 +2992,9 @@
 
     <div id="tab-standings" class="tab-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h2 style="font-size: 20px; font-weight: 800; color: var(--asv-text-main);">Aktuelle Tabellen & Wertung (Punkte & Differenz)</h2>
+        <h2 style="font-size: 20px; font-weight: 800; color: var(--asv-text-main);">Aktuelle Tabellen & Wertung (IFI-Regelwerk)</h2>
         <span style="font-size: 13px; color: var(--asv-text-muted);">
-          Sortierung: 1. Spielpunkte (2:0, 1:1, 0:2) • 2. Stockdifferenz (Plus/Minus) • 3. Eigene Stockpunkte
+          Sortierung: 1. Spielpunkte (2:0, 1:1, 0:2) • 2. Stocknote (Quotient) • 3. Stockdifferenz • 4. Eigene Stockpunkte
         </span>
       </div>
 
@@ -3043,7 +3008,7 @@
       <div class="round-selector-bar">
         <div>
           <h2 style="font-size: 20px; font-weight: 800; color: var(--asv-text-main);">Offizieller Endstand der Dorfmeisterschaft</h2>
-          <p style="font-size: 13px; color: var(--asv-text-muted);">Plätze 1 bis 17 nach Abschluss aller Runden</p>
+          <p style="font-size: 13px; color: var(--asv-text-muted);">Plätze 1 bis 16 nach Abschluss aller Runden</p>
         </div>
         <div style="display: flex; gap: 10px;">
           <button class="btn-action" onclick="printOfficialResults()">
@@ -3080,7 +3045,7 @@
       <div class="print-options-card">
         <div>
           <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 4px; color: var(--asv-text-main);">Urkunden-Druckzentrum</h3>
-          <p style="font-size: 13px; color: var(--asv-text-muted);">Druckfertige Schmuckurkunden für alle 17 Mannschaften im ASV-Design.</p>
+          <p style="font-size: 13px; color: var(--asv-text-muted);">Druckfertige Schmuckurkunden für alle 16 Mannschaften im ASV-Design.</p>
         </div>
         <div style="margin-left: auto; display: flex; gap: 10px;">
           <button class="btn-action" onclick="window.print()">
@@ -3104,11 +3069,11 @@
         <!-- Team Name Editor -->
         <div class="table-card" style="padding: 20px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="font-size: 18px; font-weight: 800; color: var(--asv-text-main);">Mannschaften verwalten (17 Teams)</h3>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--asv-text-main);">Mannschaften verwalten (16 Teams)</h3>
             <button class="btn-timer" onclick="openTeamModal()"><span class="icon-blur-box" style="background:#E5E7EB; border-color:#D1D5DB; margin-right:4px;"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></span> Namen bearbeiten</button>
           </div>
           <p style="font-size: 13px; color: var(--asv-text-muted); margin-bottom: 16px;">
-            Passe die Namen der 17 Moarschaften an die Vereine, Stammtische oder Gruppen an.
+            Passe die Namen der 16 Moarschaften nach der Auslosung an die Vereine, Stammtische oder Gruppen an.
           </p>
           <div id="teamsQuickList" style="display: flex; flex-direction: column; gap: 6px; max-height: 400px; overflow-y: auto;">
             <!-- Populated by JS -->
@@ -3172,7 +3137,7 @@
   <div class="modal-backdrop" id="teamModal">
     <div class="modal-box">
       <div class="modal-header">
-        <h3>17 Mannschaften benennen</h3>
+        <h3>16 Mannschaften benennen</h3>
         <button onclick="closeTeamModal()" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">✕</button>
       </div>
       <div class="modal-body" id="modalTeamInputs">
@@ -3196,211 +3161,173 @@
 
     // Default Team Names
     const DEFAULT_TEAMS = [
-      { id: 'A1', group: 'A', name: 'Feuerwehr 1' },
-      { id: 'A2', group: 'A', name: 'Schützenverein' },
-      { id: 'A3', group: 'A', name: 'Stammtisch Gemütlichkeit' },
-      { id: 'A4', group: 'A', name: 'Veteranen & Reservisten' },
+      { id: 'A1', group: 'A', name: 'A1' },
+      { id: 'A2', group: 'A', name: 'A2' },
+      { id: 'A3', group: 'A', name: 'A3' },
+      { id: 'A4', group: 'A', name: 'A4' },
 
-      { id: 'B1', group: 'B', name: 'Dorfjugend' },
-      { id: 'B2', group: 'B', name: 'Sportfreunde' },
-      { id: 'B3', group: 'B', name: 'Bauhof & Gemeinde' },
-      { id: 'B4', group: 'B', name: 'Kameradschaftsbund' },
+      { id: 'B1', group: 'B', name: 'B1' },
+      { id: 'B2', group: 'B', name: 'B2' },
+      { id: 'B3', group: 'B', name: 'B3' },
+      { id: 'B4', group: 'B', name: 'B4' },
 
-      { id: 'C1', group: 'C', name: 'Faschingsclub' },
-      { id: 'C2', group: 'C', name: 'Tennisverein' },
-      { id: 'C3', group: 'C', name: 'Musikverein' },
-      { id: 'C4', group: 'C', name: 'Altherren Kicker' },
+      { id: 'C1', group: 'C', name: 'C1' },
+      { id: 'C2', group: 'C', name: 'C2' },
+      { id: 'C3', group: 'C', name: 'C3' },
+      { id: 'C4', group: 'C', name: 'C4' },
 
-      { id: 'D1', group: 'D', name: 'Feuerwehr 2' },
-      { id: 'D2', group: 'D', name: 'Eisstock-Freunde' },
-      { id: 'D3', group: 'D', name: 'Landjugend' },
-      { id: 'D4', group: 'D', name: 'Trachtenverein' },
-      { id: 'D5', group: 'D', name: 'Seniorenclub' }
+      { id: 'D1', group: 'D', name: 'D1' },
+      { id: 'D2', group: 'D', name: 'D2' },
+      { id: 'D3', group: 'D', name: 'D3' },
+      { id: 'D4', group: 'D', name: 'D4' }
     ];
 
-    // Master 17-Team Vorrunde Schedule: 7 Rounds x 4 Rinks = 28 Matches
-    // Mathematically balanced: Groups A, B, C play 6 matches each (3 per team); Group D plays 10 matches (4 per team).
+    // 16-Team Vorrunde Schedule: 6 Rounds x 4 Rinks = 24 Matches
+    // Feste Bahn pro Gruppe: Gr. A = Bahn 1, Gr. B = Bahn 2, Gr. C = Bahn 3, Gr. D = Bahn 4
     const VORRUNDE_SCHEDULE = [
-      // Runde 1
       {
         round: 1,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 1',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A2', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A3', t2: 'A4', s1: null, s2: null },
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B2', s1: null, s2: null },
           { rink: 3, group: 'C', t1: 'C1', t2: 'C2', s1: null, s2: null },
-          { rink: 4, group: 'C', t1: 'C3', t2: 'C4', s1: null, s2: null }
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D2', s1: null, s2: null }
         ]
       },
-      // Runde 2
       {
         round: 2,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 2',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B2', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A3', t2: 'A4', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B3', t2: 'B4', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D2', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C3', t2: 'C4', s1: null, s2: null },
           { rink: 4, group: 'D', t1: 'D3', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 3
       {
         round: 3,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 3',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A3', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A2', t2: 'A4', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D3', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D2', t2: 'D5', s1: null, s2: null }
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B3', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C1', t2: 'C3', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D3', s1: null, s2: null }
         ]
       },
-      // Runde 4
       {
         round: 4,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 4',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B3', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A2', t2: 'A4', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B2', t2: 'B4', s1: null, s2: null },
-          { rink: 3, group: 'C', t1: 'C1', t2: 'C3', s1: null, s2: null },
-          { rink: 4, group: 'C', t1: 'C2', t2: 'C4', s1: null, s2: null }
+          { rink: 3, group: 'C', t1: 'C2', t2: 'C4', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D2', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 5
       {
         round: 5,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 5',
         matches: [
           { rink: 1, group: 'A', t1: 'A1', t2: 'A4', s1: null, s2: null },
-          { rink: 2, group: 'A', t1: 'A2', t2: 'A3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D4', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D3', t2: 'D5', s1: null, s2: null }
+          { rink: 2, group: 'B', t1: 'B1', t2: 'B4', s1: null, s2: null },
+          { rink: 3, group: 'C', t1: 'C1', t2: 'C4', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D1', t2: 'D4', s1: null, s2: null }
         ]
       },
-      // Runde 6
       {
         round: 6,
         phase: 'vorrunde',
         label: 'Vorrunde – Runde 6',
         matches: [
-          { rink: 1, group: 'B', t1: 'B1', t2: 'B4', s1: null, s2: null },
+          { rink: 1, group: 'A', t1: 'A2', t2: 'A3', s1: null, s2: null },
           { rink: 2, group: 'B', t1: 'B2', t2: 'B3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D1', t2: 'D5', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D2', t2: 'D4', s1: null, s2: null }
-        ]
-      },
-      // Runde 7
-      {
-        round: 7,
-        phase: 'vorrunde',
-        label: 'Vorrunde – Runde 7',
-        matches: [
-          { rink: 1, group: 'C', t1: 'C1', t2: 'C4', s1: null, s2: null },
-          { rink: 2, group: 'C', t1: 'C2', t2: 'C3', s1: null, s2: null },
-          { rink: 3, group: 'D', t1: 'D2', t2: 'D3', s1: null, s2: null },
-          { rink: 4, group: 'D', t1: 'D4', t2: 'D5', s1: null, s2: null }
+          { rink: 3, group: 'C', t1: 'C2', t2: 'C3', s1: null, s2: null },
+          { rink: 4, group: 'D', t1: 'D2', t2: 'D3', s1: null, s2: null }
         ]
       }
     ];
 
-    // Master Zwischenrunde Schedule (Runden 8 - 14)
-    // 4 Gruppen: E, F (Meisterrunde Plätze 1-8 à 4 Teams); G (Platzierungsrunde Plätze 9-16 à 4 Teams); H (Platzierungsrunde Plätze 9-17 mit 5 Teams inkl. 17. Mannschaft!).
-    // 7 Runden à 4 Bahnen = 28 Spiele (Gr. E 6 Spiele, Gr. F 6 Spiele, Gr. G 6 Spiele, Gr. H 10 Spiele).
+    // Zwischenrunde Schedule (Runden 7 - 12): 4 x 4er-Gruppen, feste Bahn pro Gruppe
+    // Gr. E = Bahn 1, Gr. F = Bahn 2 (Meisterrunde 1-8); Gr. G = Bahn 3, Gr. H = Bahn 4 (Platzierungsrunde 9-16)
     const ZWISCHENRUNDE_SCHEDULE = [
-      // Runde 8 (Durchgang 1)
       {
-        round: 8,
+        round: 7,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 1',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E2', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E3', t2: 'E4', s1: null, s2: null },
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F2', s1: null, s2: null },
           { rink: 3, group: 'G', t1: 'G1', t2: 'G2', s1: null, s2: null },
-          { rink: 4, group: 'G', t1: 'G3', t2: 'G4', s1: null, s2: null }
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H2', s1: null, s2: null }
         ]
       },
-      // Runde 9 (Durchgang 2)
       {
-        round: 9,
+        round: 8,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 2',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F2', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E3', t2: 'E4', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F3', t2: 'F4', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H2', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G3', t2: 'G4', s1: null, s2: null },
           { rink: 4, group: 'H', t1: 'H3', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 10 (Durchgang 3)
       {
-        round: 10,
+        round: 9,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 3',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E3', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E2', t2: 'E4', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H3', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H2', t2: 'H5', s1: null, s2: null }
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F3', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G1', t2: 'G3', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H3', s1: null, s2: null }
         ]
       },
-      // Runde 11 (Durchgang 4)
       {
-        round: 11,
+        round: 10,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 4',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F3', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E2', t2: 'E4', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F2', t2: 'F4', s1: null, s2: null },
-          { rink: 3, group: 'G', t1: 'G1', t2: 'G3', s1: null, s2: null },
-          { rink: 4, group: 'G', t1: 'G2', t2: 'G4', s1: null, s2: null }
+          { rink: 3, group: 'G', t1: 'G2', t2: 'G4', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H2', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 12 (Durchgang 5)
       {
-        round: 12,
+        round: 11,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 5',
         matches: [
           { rink: 1, group: 'E', t1: 'E1', t2: 'E4', s1: null, s2: null },
-          { rink: 2, group: 'E', t1: 'E2', t2: 'E3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H4', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H3', t2: 'H5', s1: null, s2: null }
+          { rink: 2, group: 'F', t1: 'F1', t2: 'F4', s1: null, s2: null },
+          { rink: 3, group: 'G', t1: 'G1', t2: 'G4', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H1', t2: 'H4', s1: null, s2: null }
         ]
       },
-      // Runde 13 (Durchgang 6)
       {
-        round: 13,
+        round: 12,
         phase: 'zwischenrunde',
         label: 'Zwischenrunde – Durchgang 6',
         matches: [
-          { rink: 1, group: 'F', t1: 'F1', t2: 'F4', s1: null, s2: null },
+          { rink: 1, group: 'E', t1: 'E2', t2: 'E3', s1: null, s2: null },
           { rink: 2, group: 'F', t1: 'F2', t2: 'F3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H1', t2: 'H5', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H2', t2: 'H4', s1: null, s2: null }
-        ]
-      },
-      // Runde 14 (Durchgang 7)
-      {
-        round: 14,
-        phase: 'zwischenrunde',
-        label: 'Zwischenrunde – Durchgang 7',
-        matches: [
-          { rink: 1, group: 'G', t1: 'G1', t2: 'G4', s1: null, s2: null },
-          { rink: 2, group: 'G', t1: 'G2', t2: 'G3', s1: null, s2: null },
-          { rink: 3, group: 'H', t1: 'H2', t2: 'H3', s1: null, s2: null },
-          { rink: 4, group: 'H', t1: 'H4', t2: 'H5', s1: null, s2: null }
+          { rink: 3, group: 'G', t1: 'G2', t2: 'G3', s1: null, s2: null },
+          { rink: 4, group: 'H', t1: 'H2', t2: 'H3', s1: null, s2: null }
         ]
       }
     ];
 
-    // Master Endspiele (Runden 15 & 16)
+    // Master Endspiele (Runden 13 & 14)
     const ENDSPIELE_SCHEDULE = [
       {
-        round: 15,
+        round: 13,
         phase: 'endspiele',
         label: 'Endspiele – Runde 1 (Plätze 3, 5, 9, 11)',
         matches: [
@@ -3411,7 +3338,7 @@
         ]
       },
       {
-        round: 16,
+        round: 14,
         phase: 'endspiele',
         label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 7, 13, 15)',
         matches: [
@@ -3446,8 +3373,8 @@
 
     function validateAndSanitizeState(parsed) {
       if (!parsed || typeof parsed !== 'object') return null;
-      if (!Array.isArray(parsed.teams) || parsed.teams.length < 17) return null;
-      if (!Array.isArray(parsed.rounds) || parsed.rounds.length < 16) return null;
+      if (!Array.isArray(parsed.teams) || parsed.teams.length !== 16) return null;
+      if (!Array.isArray(parsed.rounds) || parsed.rounds.length !== 14) return null;
       for (const r of parsed.rounds) {
         if (!Array.isArray(r.matches)) return null;
       }
@@ -3456,11 +3383,14 @@
 
     // Load from LocalStorage if available
     function loadPersistedState() {
-      // Clear legacy storage key
-      try { localStorage.removeItem('asv_eisstock_data_v2'); } catch(e) {}
+      // Clear legacy storage keys (v2 & 17-Team v3)
+      try {
+        localStorage.removeItem('asv_eisstock_data_v2');
+        localStorage.removeItem('asv_eisstock_data_v3');
+      } catch(e) {}
 
       try {
-        const saved = localStorage.getItem('asv_eisstock_data_v3');
+        const saved = localStorage.getItem('asv_eisstock_data_v4');
         if (saved) {
           const parsed = JSON.parse(saved);
           const validated = validateAndSanitizeState(parsed);
@@ -3481,7 +3411,7 @@
 
     function saveState() {
       try {
-        localStorage.setItem('asv_eisstock_data_v3', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
         syncChannel.postMessage({ type: 'SYNC_STATE', payload: state });
       } catch (e) {
         console.error('Save error:', e);
@@ -3689,9 +3619,9 @@
       if (filterPhase === 'vorrunde') {
         groupTeams = state.teams.filter(t => t.group === groupKey);
       } else if (filterPhase === 'zwischenrunde') {
-        // E, F, G (4 Teams) und H (5 Teams inkl. 17. Mannschaft)
+        // E, F, G, H (jeweils 4 Teams)
         const prefix = groupKey;
-        const indices = groupKey === 'H' ? [1, 2, 3, 4, 5] : [1, 2, 3, 4];
+        const indices = [1, 2, 3, 4];
         groupTeams = indices.map(idx => {
           const slot = prefix + idx;
           const assigned = (state.qualifiers && state.qualifiers[slot]) || null;
@@ -3778,9 +3708,10 @@
       });
 
       // Sort by IFI rules
-      // Sortierung nach Punkten -> Stockdifferenz -> Eigene Stöcke
+      // Sortierung nach IFI-Regelwerk: Punkte -> Stocknote -> Stockdifferenz -> Eigene Stöcke
       list.sort((a, b) => {
         if (b.pointsPlus !== a.pointsPlus) return b.pointsPlus - a.pointsPlus;
+        if (Math.abs(b.stockNote - a.stockNote) > 0.0001) return b.stockNote - a.stockNote;
         if (b.stockDiff !== a.stockDiff) return b.stockDiff - a.stockDiff;
         return b.stocksPlus - a.stocksPlus;
       });
@@ -3810,9 +3741,9 @@
       if (tableD[0]) state.qualifiers['F3'] = tableD[0].team;
       if (tableC[1]) state.qualifiers['F4'] = tableC[1].team;
 
-      // Staffel 2 (Platzierungsrunde Plätze 9 - 17)
+      // Staffel 2 (Platzierungsrunde Plätze 9 - 16)
       // Gruppe G: 3. Gr A, 4. Gr B, 3. Gr C, 4. Gr D
-      // Gruppe H: 3. Gr B, 4. Gr A, 3. Gr D, 4. Gr C, 5. Gr D (17. Team!)
+      // Gruppe H: 3. Gr B, 4. Gr A, 3. Gr D, 4. Gr C
       if (tableA[2]) state.qualifiers['G1'] = tableA[2].team;
       if (tableB[3]) state.qualifiers['G2'] = tableB[3].team;
       if (tableC[2]) state.qualifiers['G3'] = tableC[2].team;
@@ -3822,7 +3753,6 @@
       if (tableA[3]) state.qualifiers['H2'] = tableA[3].team;
       if (tableD[2]) state.qualifiers['H3'] = tableD[2].team;
       if (tableC[3]) state.qualifiers['H4'] = tableC[3].team;
-      if (tableD[4]) state.qualifiers['H5'] = tableD[4].team;
 
       // Now compute finals matchups from Zwischenrunde
       const tableE = calculateGroupTable('E', 'zwischenrunde');
@@ -4057,8 +3987,7 @@
 
         let titleDesc = `Gruppe ${gKey}`;
         if (gKey === 'E' || gKey === 'F') titleDesc += ' (Meisterrunde Plätze 1-8)';
-        if (gKey === 'G') titleDesc += ' (Platzierungsrunde Plätze 9-16)';
-        if (gKey === 'H') titleDesc += ' (Platzierungsrunde Plätze 9-17 mit 5 Teams)';
+        if (gKey === 'G' || gKey === 'H') titleDesc += ' (Platzierungsrunde Plätze 9-16)';
 
         let rowsHtml = tableData.map((row, idx) => `
           <tr>
@@ -4068,6 +3997,7 @@
             <td class="points-cell">${row.pointsPlus}:${row.pointsMinus}</td>
             <td style="text-align: center;">${row.stocksPlus}:${row.stocksMinus}</td>
             <td style="text-align: right; font-weight: 800; color: ${row.stockDiff > 0 ? 'var(--asv-accent-green)' : (row.stockDiff < 0 ? 'var(--asv-accent-red)' : 'var(--asv-text-main)')};">${row.stockDiff > 0 ? '+' : ''}${row.stockDiff}</td>
+            <td style="text-align: right; font-family: monospace; font-weight: 700; color: #4B5563;">${row.played === 0 ? '0.000' : row.stockNote.toFixed(3)}</td>
           </tr>
         `).join('');
 
@@ -4085,6 +4015,7 @@
                 <th style="text-align:center; width: 55px;">Pkt</th>
                 <th style="text-align:center; width: 65px;">Stöcke</th>
                 <th style="text-align:right; width: 50px;">Diff</th>
+                <th style="text-align:right; width: 65px;">Note</th>
               </tr>
             </thead>
             <tbody>
@@ -4111,7 +4042,6 @@
       // p11 -> winner 11th, loser 12th
       // p13 -> winner 13th, loser 14th
       // p15 -> winner 15th, loser 16th
-      // P17 -> 17th place
 
       const finalRankList = [];
       const endRounds = state.rounds.filter(r => r.phase === 'endspiele');
@@ -4154,11 +4084,6 @@
         }
       });
 
-      // Team 17: 5. Platz aus Gruppe H der Zwischenrunde
-      const tableH = calculateGroupTable('H', 'zwischenrunde');
-      const t17 = (tableH[4] && tableH[4].team) || (state.qualifiers && state.qualifiers['H5']) || state.teams[16] || { id: 'H5', name: '5. Platz Gruppe H' };
-      finalRankList.push({ rank: 17, team: t17, status: 'Platz 17 (Zwischenrunde Gruppe H)' });
-
       // Sort by rank
       finalRankList.sort((a, b) => a.rank - b.rank);
 
@@ -4194,8 +4119,8 @@
       if (!container) return;
       container.innerHTML = '';
 
-      // Generate for all 17 teams
-      for (let rank = 1; rank <= 17; rank++) {
+      // Generate for all 16 teams
+      for (let rank = 1; rank <= 16; rank++) {
         // Find team for this rank if available
         let teamName = `Mannschaft Platz ${rank}`;
         const teamObj = state.teams[rank - 1];
@@ -4251,7 +4176,7 @@
             </div>
             <div style="text-align: right; font-size: 13px;">
               Datum: ${new Date().toLocaleDateString('de-DE')}<br>
-              17 Mannschaften • 4 Bahnen
+              16 Mannschaften • 4 Bahnen
             </div>
           </div>
 
@@ -4340,16 +4265,17 @@
           let rows = tData.map((r, i) => `
             <tr>
               <td style="font-weight:800; color:var(--asv-schwarz); width:20px;">${i+1}.</td>
-              <td style="font-weight:700; color:var(--asv-text-main); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r.team.name}</td>
+              <td style="font-weight:700; color:var(--asv-text-main); max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${r.team.name}</td>
               <td style="text-align:center; font-weight:800; color:var(--asv-text-main);">${r.pointsPlus}:${r.pointsMinus}</td>
               <td style="text-align:right; font-weight:800;">${r.stockDiff > 0 ? "+" : ""}${r.stockDiff}</td>
+              <td style="text-align:right; font-family:monospace; font-weight:700; color:#4B5563;">${r.played === 0 ? "0.000" : r.stockNote.toFixed(3)}</td>
             </tr>
           `).join('');
 
           card.innerHTML = `
             <div class="tv-table-header">
               <span>Gruppe ${gKey}</span>
-              <small style="color:#D1D5DB;">Punkte / Diff</small>
+              <small style="color:#D1D5DB;">Pkt / Diff / Note</small>
             </div>
             <div class="tv-table-body">
               <table>
@@ -4359,6 +4285,7 @@
                     <th>Team</th>
                     <th style="text-align:center;">Pkt</th>
                     <th style="text-align:right;">Diff</th>
+                    <th style="text-align:right;">Note</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -4530,7 +4457,7 @@
     // -------------------------------------------------------------
     // TURNIERPLAN (Zeitplan & Überblick)
     // -------------------------------------------------------------
-    const SCHED_BREAKS = { 7: 20, 14: 10 }; // Pause (Min.) NACH Runde 7 (Mittag) und Runde 14 (Auswertung)
+    const SCHED_BREAKS = { 6: 20, 12: 10 }; // Pause (Min.) NACH Runde 6 (Mittag) und Runde 12 (Auswertung)
 
     function schedStartMinutes() {
       const t = (state.startTime || '10:30').split(':');
@@ -4659,7 +4586,7 @@
           ${cells}
           <td>${status}</td></tr>`;
         if (SCHED_BREAKS[r.round]) {
-          const label = r.round === 7 ? 'Mittagspause & Gruppenauswertung' : 'Auswertungspause';
+          const label = r.round === 6 ? 'Mittagspause & Gruppenauswertung' : 'Auswertungspause';
           html += `<tr class="break-row"><td colspan="7"><span class="icon-blur-box" style="width:18px; height:18px; min-width:18px; margin-right:6px;"><svg viewBox="0 0 24 24" style="width:10px; height:10px;"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"></path></svg></span> ${label}: ${fmtClock(slot.end)} – ${fmtClock(slot.end + SCHED_BREAKS[r.round])} Uhr (${SCHED_BREAKS[r.round]} Min.)</td></tr>`;
         }
       });
