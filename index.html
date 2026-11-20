@@ -1005,23 +1005,23 @@
       {
         round: 13,
         phase: 'endspiele',
-        label: 'Endspiele – Runde 1 (Plätze 3, 5, 9, 11)',
+        label: 'Endspiele – Runde 1 (Platzierungsspiele: Plätze 9, 11, 13, 15)',
         matches: [
-          { rink: 1, group: 'Finale', name: 'Spiel um Platz 3', t1: '2. Gr. E', t2: '2. Gr. F', s1: null, s2: null, slotKey: 'p3' },
-          { rink: 2, group: 'Finale', name: 'Spiel um Platz 5', t1: '3. Gr. E', t2: '3. Gr. F', s1: null, s2: null, slotKey: 'p5' },
-          { rink: 3, group: 'Finale', name: 'Spiel um Platz 9 (Finale Staffel 2)', t1: '1. Gr. G', t2: '1. Gr. H', s1: null, s2: null, slotKey: 'p9' },
-          { rink: 4, group: 'Finale', name: 'Spiel um Platz 11', t1: '2. Gr. G', t2: '2. Gr. H', s1: null, s2: null, slotKey: 'p11' }
+          { rink: 1, group: 'Finale', name: 'Spiel um Platz 9 (Finale Staffel 2)', t1: '1. Gr. G', t2: '1. Gr. H', s1: null, s2: null, slotKey: 'p9' },
+          { rink: 2, group: 'Finale', name: 'Spiel um Platz 11', t1: '2. Gr. G', t2: '2. Gr. H', s1: null, s2: null, slotKey: 'p11' },
+          { rink: 3, group: 'Finale', name: 'Spiel um Platz 13', t1: '3. Gr. G', t2: '3. Gr. H', s1: null, s2: null, slotKey: 'p13' },
+          { rink: 4, group: 'Finale', name: 'Spiel um Platz 15', t1: '4. Gr. G', t2: '4. Gr. H', s1: null, s2: null, slotKey: 'p15' }
         ]
       },
       {
         round: 14,
         phase: 'endspiele',
-        label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 7, 13, 15)',
+        label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 3, 5, 7)',
         matches: [
           { rink: 1, group: 'Finale', name: '🏆 GROSSES FINALE (Spiel um Platz 1)', t1: '1. Gr. E', t2: '1. Gr. F', s1: null, s2: null, slotKey: 'p1' },
-          { rink: 2, group: 'Finale', name: 'Spiel um Platz 7', t1: '4. Gr. E', t2: '4. Gr. F', s1: null, s2: null, slotKey: 'p7' },
-          { rink: 3, group: 'Finale', name: 'Spiel um Platz 13', t1: '3. Gr. G', t2: '3. Gr. H', s1: null, s2: null, slotKey: 'p13' },
-          { rink: 4, group: 'Finale', name: 'Spiel um Platz 15', t1: '4. Gr. G', t2: '4. Gr. H', s1: null, s2: null, slotKey: 'p15' }
+          { rink: 2, group: 'Finale', name: 'Spiel um Platz 3', t1: '2. Gr. E', t2: '2. Gr. F', s1: null, s2: null, slotKey: 'p3' },
+          { rink: 3, group: 'Finale', name: 'Spiel um Platz 5', t1: '3. Gr. E', t2: '3. Gr. F', s1: null, s2: null, slotKey: 'p5' },
+          { rink: 4, group: 'Finale', name: 'Spiel um Platz 7', t1: '4. Gr. E', t2: '4. Gr. F', s1: null, s2: null, slotKey: 'p7' }
         ]
       }
     ];
@@ -1108,7 +1108,7 @@
 
     // 2. Storage event fallback
     window.addEventListener('storage', (e) => {
-      if ((e.key === 'asv_eisstock_data_v4' || e.key === 'asv_eisstock_data_v3' || e.key === 'asv_eisstock_data_v2') && e.newValue) {
+      if ((e.key === 'asv_eisstock_data_v5' || e.key === 'asv_eisstock_data_v3' || e.key === 'asv_eisstock_data_v2') && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
           const validated = validateAndSanitizeState(parsed);
@@ -1144,7 +1144,7 @@
 
       // Load from localStorage v4
       try {
-        const saved = localStorage.getItem('asv_eisstock_data_v4');
+        const saved = localStorage.getItem('asv_eisstock_data_v5');
         if (saved) {
           const parsed = JSON.parse(saved);
           const validated = validateAndSanitizeState(parsed);
@@ -1162,7 +1162,7 @@
 
       // If storage is empty or invalid, save clean default state
       try {
-        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v5', JSON.stringify(state));
       } catch(e) {}
     }
 
@@ -1619,11 +1619,11 @@
       try {
         localStorage.removeItem('asv_eisstock_data_v2');
         localStorage.removeItem('asv_eisstock_data_v3');
-        localStorage.removeItem('asv_eisstock_data_v4');
+        localStorage.removeItem('asv_eisstock_data_v5');
       } catch(e) {}
       state = createInitialState();
       try {
-        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v5', JSON.stringify(state));
       } catch(e) {}
       renderTV();
       alert('Anzeige & Cache erfolgreich zurückgesetzt!');
@@ -3329,23 +3329,23 @@
       {
         round: 13,
         phase: 'endspiele',
-        label: 'Endspiele – Runde 1 (Plätze 3, 5, 9, 11)',
+        label: 'Endspiele – Runde 1 (Platzierungsspiele: Plätze 9, 11, 13, 15)',
         matches: [
-          { rink: 1, group: 'Finale', name: 'Spiel um Platz 3', t1: '2. Gr. E', t2: '2. Gr. F', s1: null, s2: null, slotKey: 'p3' },
-          { rink: 2, group: 'Finale', name: 'Spiel um Platz 5', t1: '3. Gr. E', t2: '3. Gr. F', s1: null, s2: null, slotKey: 'p5' },
-          { rink: 3, group: 'Finale', name: 'Spiel um Platz 9 (Finale Staffel 2)', t1: '1. Gr. G', t2: '1. Gr. H', s1: null, s2: null, slotKey: 'p9' },
-          { rink: 4, group: 'Finale', name: 'Spiel um Platz 11', t1: '2. Gr. G', t2: '2. Gr. H', s1: null, s2: null, slotKey: 'p11' }
+          { rink: 1, group: 'Finale', name: 'Spiel um Platz 9 (Finale Staffel 2)', t1: '1. Gr. G', t2: '1. Gr. H', s1: null, s2: null, slotKey: 'p9' },
+          { rink: 2, group: 'Finale', name: 'Spiel um Platz 11', t1: '2. Gr. G', t2: '2. Gr. H', s1: null, s2: null, slotKey: 'p11' },
+          { rink: 3, group: 'Finale', name: 'Spiel um Platz 13', t1: '3. Gr. G', t2: '3. Gr. H', s1: null, s2: null, slotKey: 'p13' },
+          { rink: 4, group: 'Finale', name: 'Spiel um Platz 15', t1: '4. Gr. G', t2: '4. Gr. H', s1: null, s2: null, slotKey: 'p15' }
         ]
       },
       {
         round: 14,
         phase: 'endspiele',
-        label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 7, 13, 15)',
+        label: 'Endspiele – Runde 2 (GROSSES FINALE & Plätze 3, 5, 7)',
         matches: [
           { rink: 1, group: 'Finale', name: '🏆 GROSSES FINALE (Spiel um Platz 1)', t1: '1. Gr. E', t2: '1. Gr. F', s1: null, s2: null, slotKey: 'p1' },
-          { rink: 2, group: 'Finale', name: 'Spiel um Platz 7', t1: '4. Gr. E', t2: '4. Gr. F', s1: null, s2: null, slotKey: 'p7' },
-          { rink: 3, group: 'Finale', name: 'Spiel um Platz 13', t1: '3. Gr. G', t2: '3. Gr. H', s1: null, s2: null, slotKey: 'p13' },
-          { rink: 4, group: 'Finale', name: 'Spiel um Platz 15', t1: '4. Gr. G', t2: '4. Gr. H', s1: null, s2: null, slotKey: 'p15' }
+          { rink: 2, group: 'Finale', name: 'Spiel um Platz 3', t1: '2. Gr. E', t2: '2. Gr. F', s1: null, s2: null, slotKey: 'p3' },
+          { rink: 3, group: 'Finale', name: 'Spiel um Platz 5', t1: '3. Gr. E', t2: '3. Gr. F', s1: null, s2: null, slotKey: 'p5' },
+          { rink: 4, group: 'Finale', name: 'Spiel um Platz 7', t1: '4. Gr. E', t2: '4. Gr. F', s1: null, s2: null, slotKey: 'p7' }
         ]
       }
     ];
@@ -3390,7 +3390,7 @@
       } catch(e) {}
 
       try {
-        const saved = localStorage.getItem('asv_eisstock_data_v4');
+        const saved = localStorage.getItem('asv_eisstock_data_v5');
         if (saved) {
           const parsed = JSON.parse(saved);
           const validated = validateAndSanitizeState(parsed);
@@ -3411,7 +3411,7 @@
 
     function saveState() {
       try {
-        localStorage.setItem('asv_eisstock_data_v4', JSON.stringify(state));
+        localStorage.setItem('asv_eisstock_data_v5', JSON.stringify(state));
         syncChannel.postMessage({ type: 'SYNC_STATE', payload: state });
       } catch (e) {
         console.error('Save error:', e);
